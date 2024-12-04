@@ -14,22 +14,21 @@ interface SideBarProps {
 	handleClickButton: (id: number) => void;
 }
 
-export function SideBar(props: SideBarProps) {
-	// Complete aqui
+export function SideBar({ genres, selectedGenreId, handleClickButton }: SideBarProps) {
 	return (
 		<nav className="sidebar">
 			<span>
 				Watch<p>Me</p>
 			</span>
 			<div className="buttons-container">
-				{props.genres.map((genre) => (
+				{genres.map((genre) => (
 					<Button
 						key={genre.id}
 						id={String(genre.id)}
 						title={genre.title}
 						iconName={genre.name}
-						onClick={() => props.handleClickButton(genre.id)}
-						selected={props.selectedGenreId === genre.id}
+						onClick={() => handleClickButton(genre.id)}
+						selected={selectedGenreId === genre.id}
 					/>
 				))}
 			</div>

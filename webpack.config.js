@@ -40,9 +40,7 @@ module.exports = {
 				use: {
 					loader: 'babel-loader',
 					options: {
-						plugins: [
-							isDevelopment && require.resolve('react-refresh/babel')
-						].filter(Boolean)
+						plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean)
 					}
 				}
 			},
