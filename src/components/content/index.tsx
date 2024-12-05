@@ -17,10 +17,11 @@ interface Movie {
 	Runtime: string;
 }
 
-export interface Genre {
+interface Genre {
 	id: string;
 	name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
 	title: string;
+	movies: Movie[];
 }
 
 interface ContentProps {
@@ -29,11 +30,17 @@ interface ContentProps {
 
 export function Content({ selectedGenreId }: ContentProps) {
 	const [selectedGenre, setSelectedGenre] = useState<Genre>({} as Genre);
-	const [movies, setMovies] = useState<Movie[]>([]);
 
 	useEffect(() => {
-		api.get<Movie[]>(`/movies?Genre_id=${selectedGenreId}`).then((response) => setMovies(response.data));
-		api.get<Genre>(`/genres/${selectedGenreId}`).then((response) => setSelectedGenre(response.data));
+		(async () => {
+			const results = await Promise.all([api.get<Movie[]>(`/movies?Genre_id=${selectedGenreId}`), api.get<Genre>(`/genres/${selectedGenreId}`)]);
+			const movies = results[0].data;
+
+			setSelectedGenre({
+				...results[1].data,
+				movies
+			});
+		})();
 	}, [selectedGenreId]);
 
 	return (
@@ -46,7 +53,7 @@ export function Content({ selectedGenreId }: ContentProps) {
 
 			<main>
 				<div className="movies-list">
-					{movies.map((movie) => (
+					{selectedGenre.movies?.map((movie) => (
 						<MovieCard key={movie.imdbID} title={movie.Title} poster={movie.Poster} runtime={movie.Runtime} rating={movie.Ratings[0].Value} />
 					))}
 				</div>

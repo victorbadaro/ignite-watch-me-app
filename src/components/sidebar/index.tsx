@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import { Button } from '../button';
-import type { Genre } from '../content';
 import { Icon } from '../icon';
 
 import './styles.scss';
 
+interface Genre {
+	id: string;
+	name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
+	title: string;
+}
 interface SidebarProps {
 	selectedGenreId: string;
 	handleClickButton: (id: string) => void;
